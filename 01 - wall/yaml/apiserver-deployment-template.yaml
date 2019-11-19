@@ -1,0 +1,41 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: livewall-apiserver
+  namespace: default
+  annotations:
+    opflex.cisco.com/endpoint-group: '{"policy-space":"<PROVIDE_ACI_TENANT>","name":"livewall|api"}'
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: livewall-apiserver
+    spec:
+      containers:
+      - env:
+        - name: appd_appname
+          value: "livewall-yaml"
+        - name: appd_tiername
+          value: "apiserver"
+        - name: appd_hostname
+          value: "192.168.130.210"
+        - name: appd_port
+          value: "8090"
+        - name: appd_sslenabled
+          value: "false"
+        - name: appd_account
+          value: "GREMLINS"
+        - name: appd_accesskey
+          value: "9e3b433c-d509-4ea1-bb3b-05409a5aab24"
+        - name: db_host
+          value: "10.139.11.209"
+        - name: db_user
+          value: "predator"
+        - name: db_pass
+          value: "C1sco123"
+        - name: db_database
+          value: "<PROVIDE_ACI_TENANT>"
+        image: 10.139.12.210/cl-wall/apiserver:latest
+        name: livewall-apiserver

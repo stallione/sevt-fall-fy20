@@ -1,0 +1,23 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: livewall-frontend
+  namespace: default
+  annotations:
+    opflex.cisco.com/endpoint-group: '{"policy-space":"<PROVIDE_ACI_TENANT>","name":"livewall|frontend"}'
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: livewall-frontend
+    spec:
+      containers:
+      - env:
+        - name: livewall_namespace
+          value: "default"
+        - name: bing_maps_api_key
+          value: "AuqW9LUO744wxmr6ik0PiJYAGbtKqmelkReiUT5_jhP4Dgh4cwDH-m9vE5wLY2z3"
+        image: 10.139.12.210/cl-wall/frontend:latest
+        name: livewall-frontend

@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <script charset="UTF-8">
+      window["adrum-start-time"] = new Date().getTime();
+      (function(config) {
+        config.appKey = "AD-AAB-AAM-VVW";
+        config.adrumExtUrlHttp = "http://cdn.appdynamics.com";
+        config.adrumExtUrlHttps = "https://cdn.appdynamics.com";
+        config.beaconUrlHttp = "http://col.eum-appdynamics.com";
+        config.beaconUrlHttps = "https://col.eum-appdynamics.com";
+        config.xd = { enable: false };
+      })(window["adrum-config"] || (window["adrum-config"] = {}));
+    </script>
+    <script src="//cdn.appdynamics.com/adrum/adrum-4.5.0.773.js"></script>
+    <meta http-equiv="refresh" content="300" />
+    <meta charset="utf-8" />
+    <title>The Cisco Live Wall .:|:.:|:.</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <style>
+      .service-card {
+        margin-left: 50px;
+        margin-right: 50px;
+      }
+
+      #id-weather-card {
+        margin-top: 10px;
+        margin-left: 100px;
+        width: 50%;
+      }
+      /*
+
+        #id-events-card {
+            margin-top: 10px;
+            margin-left: 50px;
+            width: 73%;
+        }
+
+        */
+      #id-events-card {
+        margin-top: 10px;
+      }
+
+      /*
+        #id-traffic-card {
+            margin-top: 10px;
+            margin-left: 50px;
+            width: 67%;
+        }
+        */
+      #id-traffic-card {
+        margin-top: 10px;
+      }
+      .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <link rel="icon" type="image/png" href="img/rmlab.png" />
+  </head>
+  <body>
+    <div class="row-fluid">
+      <div class="modal" tabindex="-1" id="api-loading">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title ">
+                Loading Live Wall Content, please wait...
+              </h5>
+            </div>
+            <div class="row-fluid">
+              <div class="modal-body"><div class="loader"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+          <h3 class="display-4">The Cisco Live Wall</h3>
+          <p class="lead" hidden>
+            This is a 5 tier cloud-native application running on Kubernetes!
+          </p>
+          <div class="row-fluid">
+            <h6 id="id-apiserver-container"></h6>
+            <h6 id="id-apiserver-version"></h6>
+          </div>
+        </a>
+      </nav>
+    </div>
+    <br />
+    <div class="container-fluid">
+      <div class="row">
+        <div class="card col service-card" style="width: 18rem;">
+          <h5 class="card-header">Weather in San Diego</h5>
+          <br />
+          <img
+            class="card-img-top"
+            id="id-weather-card"
+            src="./img/weather.jpg"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <h5 class="card-title">The Weather Today</h5>
+            <hr />
+            <p class="card-text" id="id-weather-text"></p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" id="id-weather-container">
+              <b>Fetched by pod: </b>
+            </li>
+            <li class="list-group-item" id="id-weather-version">
+              <b>Pod App version: </b>
+            </li>
+            <li class="list-group-item">
+              <a
+                href="#"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#weather-payload-modal"
+                >View Payload</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="card col service-card" style="width: 18rem;">
+          <h5 class="card-header">San Diego Event Wall</h5>
+          <br />
+          <img
+            class="card-img-top"
+            id="id-events-card"
+            src="./img/events.jpg"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Happening Today</h5>
+            <hr />
+            <p class="card-text" id="id-events-text"></p>
+            <a
+              tabindex="0"
+              class="btn btn-sm btn-outline-primary"
+              role="button"
+              id="id-event-full-description"
+              data-toggle="popover"
+              data-trigger="focus"
+              title="Event Details"
+              data-content="Description Here"
+              data-html="true"
+              >Full Description</a
+            >
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" id="id-events-container">
+              <b>Fetched by pod: </b>
+            </li>
+            <li class="list-group-item" id="id-events-version">
+              <b>Pod App version: </b>
+            </li>
+            <li class="list-group-item">
+              <a
+                href="#"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#events-payload-modal"
+                >View Payload</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="card col service-card" style="width: 18rem;">
+          <h5 class="card-header">San Diego Traffic Info</h5>
+          <br />
+          <img
+            class="card-img-top"
+            id="id-traffic-card"
+            src="./img/traffic.jpg"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Incident Reports</h5>
+            <hr />
+            <p class="card-text" id="id-traffic-text"></p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" id="id-traffic-container">
+              <b>Fetched by pod: </b>
+            </li>
+            <li class="list-group-item" id="id-traffic-version">
+              <b>Pod App version: </b>
+            </li>
+            <li class="list-group-item">
+              <a
+                href="#"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#traffic-payload-modal"
+                >View Payload</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <br />
+    </div>
+    <br />
+    <div
+      class="modal fade"
+      id="weather-payload-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Weather - Weather Service Payload
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="id-modal-weather-body">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade "
+      id="events-payload-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Events Service Payload
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="id-modal-events-body">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="traffic-payload-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Incident Service Payload
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="id-modal-traffic-body">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <blockquote class="blockquote mb-0">
+        <img alt="RMLAB Logo" src="img/rmlab.png" width="42px" height="34px" />
+        Made with love at RMLAB updated by 3Pings
+        <footer class="blockquote-footer">2019 - jusbarks@cisco.com</footer>
+      </blockquote>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/tarantula.js"></script>
+  </body>
+</html>
