@@ -54,8 +54,11 @@ Before we create our first CCP cluster we need to access the lab.  The lab lever
 ## Logging In
 
 * Open your Cisco Anyconnect Client
-	* Connect to vpn.reqdemo.com (your vpn may drop and reconnect after 1 minute.  This is normal)
+	* Connect to vpn.reqdemo.com 
+	* Select "reqlab-admin" as the domain
+	(your vpn may drop and reconnect after 1 minute.  This is normal)
 	![anyconnect](images/anyconnect.jpg)
+	
 	
 * For MAC users running Catalina.  Mac Security Policies have been enhanced.  See below:
 https://support.apple.com/en-us/HT210176
