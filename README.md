@@ -20,6 +20,8 @@ Table of Contents
 * [Connect to CCP Cluster](#connect-to-ccp-cluster)
 * [Deploy Database](#deploy-database)
 * [Clone the Git Repo](#clone-the-git-repo)
+* [Deploy LiveWall](#deploy-livewall)
+* [Persistant Volumes](#persistant-volumes)
 
 ## Credentials
 | Windows Username | Pod Number | ssh host     | username | password    | CCP Cluster CIDR  |
@@ -256,7 +258,8 @@ While that is happening, go to your remote desktop session where Postman is and 
 		![kubectlTest](images/kubectlTest.jpg)
 		
 ## Deploy Database
-	* We are deploying a database onto an existing MYSQL Server.  Substitute your pod number for "podXX"
+* We are deploying a database onto an existing MYSQL Server.  Substitute your pod number for "podXX"
+	
 	```
 	mysql -h 10.139.11.209 -u root -p -e "create database podXX";
 	```
@@ -267,18 +270,23 @@ While that is happening, go to your remote desktop session where Postman is and 
 	The password when prompted is "C1sco123"
 	
 * To verify if the database is there run the following command.  You should see a table like below.
+
 	```
 	mysql -h 10.139.11.209 -u root -p -D pod01 -e "show tables";
 	```
 	![dbTable](images/dbTable.jpg)
 	
 ## Clone the Git Repo
-	We need to download the files for the rest of the lab.  From the SSH host run the following:
+* We need to download the files for the rest of the lab.  From the SSH host run the following:
+	
+	
 	```
 	git clone https://github.com/3pings/sevt-fall-fy20.git
 	cd sevt-fall-fy20/
 	```
-The rest of this lab will utilize these files.  The first thing we are going to need to do is to deploy our "livewall app".
+
+## Deploy LiveWall
+* The rest of this lab will utilize these files.  The first thing we are going to need to do is to deploy our "livewall app".
 
 	```
 	cd 01\ -\ wall/
@@ -292,3 +300,129 @@ The rest of this lab will utilize these files.  The first thing we are going to 
 	You should see something like the below
 	![livewallDeploy](images/livewallDeploy.jpg)
 	
+* Using Kubectl we can get the status of the pods
+	
+	```
+	kubectl get pods
+	```
+	
+![livewallPods](images/livewallPods.jpg)
+
+* We can also get the IP address of our frontend
+
+	```
+	kubectl get svc
+	```
+
+![livewallSvc](images/livewallSvc.jpg)
+
+* Open a web browser and browse too the address shown.  In the example it is http://10.139.151.20
+
+![livewallFront](images/livewallFront.jpg)
+
+* So what is happening?  To get a better view let's browse back to APIC.
+
+![mysqlEpg](images/mysqlEpg.jpg)
+
+* Notice that there is an EPG which is not part of our application profile.  This is an EPG with a virtual machine running our mysql database we created earlier.
+
+* Let's look at a different view.  Navigating to the "skunkworks" tenant and drilling into the CLUS19-DB_13 Application Profile under the topology we see the following:
+
+![mysqlProfile](images/mysqlProfile.jpg)
+
+* The purpose of this is to show policy across vms and kubernetes pods (of course this would apply to baremetal also)
+
+* Let's navigate back to our tenant (podXX) and look at the API epg beneath the "livewall"
+
+![apiEpg](images/apiEpg.jpg)
+
+* Expand the "api" epg on the left and select "contracts"
+
+![apiContract](images/apiContract.jpg)
+
+* Notice that there are two contracts, a provided "api" contract which is being consumed by the frontend and our collectors, and a consumed mysql contract which is provided my the "mysql" epg we looked at earlier.
+
+* Let's delete the "mysql" contract
+	* Right click on the contract and select "delete"
+	![mysqlDelete](images/mysqlDelete.jpg)
+* Now browse back to our web frontend we looked at earlier.
+* What happened?
+* Why?
+
+![whereIsTheData](images/whereIsTheData.jpg)
+
+* Where is the data?
+
+* Let's add the contract back
+	* Right click on "contract" under the "api" epg
+	
+	 ![consumedContract](images/consumedContract.jpg) 
+	
+	* Select "Add Consumed Contract"
+
+	![mysqlDropdown](images/mysqlDropdown.jpg)
+	
+	* Select "mysql" from the dropdown
+	* Select "Submit"
+
+* Check your site and see what happened.
+
+## Persistant Volumes
+
+* Change directories to the Message Board
+
+	```
+	cd ../02\ -\ messageboard/
+	```
+	
+* Explore the files in this folder
+
+	```cat 01-message-board-pvc.yam
+	```
+![mbPvc](images/mbPvc.jpg)
+
+* Notice the "StorageClassName"
+	* Let's exporer further
+
+		```
+		kubectl get sc
+		```
+	
+	* What do you see?
+	
+	![storageSC](images/storageSC.jpg)
+	
+* Understanding the CSI
+
+![csiImage](images/csiImage.jpg)
+
+## Deploy Message Board
+
+* Apply the Persistant Volume Claim
+
+```
+kubectl apply -f 01-message-board-pvc.yaml
+kubectl get pvc
+```
+
+* Apply the Message Board yaml file
+
+```
+kubectl apply -f 02-message-board.yaml
+```
+
+![mbDeploy](images/mbDeploy.jpg)
+
+* Get the Servicve IP
+
+```
+kubectl get svc
+```
+
+![mbSvc](images/mbSvc.jpg)
+
+* Notice the Port Number
+
+* Web to the IP and the port number provided
+
+![mbWeb](images/mbWeb.jpg)
