@@ -24,7 +24,7 @@ Table of Contents
 * [Persistant Volumes](#persistant-volumes)
 
 ## Credentials
-| Windows Username | Pod Number | ssh host     | username | password    | CCP Cluster CIDR  |
+| Username         | Pod Number | ssh host     | username | password    | CCP Cluster CIDR  |
 |------------------|------------|--------------|----------|-------------|-------------------|
 | user1            | Pod1       | 10.139.14.21 | root     | C1sco12345! | 10.139.161.0/27   |
 | user2            | Pod2       | 10.139.14.22 | root     | C1sco12345! | 10.139.161.32/27  |
@@ -55,6 +55,28 @@ Before we create our first CCP cluster we need to access the lab.  The lab lever
 * Open your Cisco Anyconnect Client
 	* Connect to vpn.reqdemo.com (your vpn may drop and reconnect after 1 minute.  This is normal)
 	![anyconnect](images/anyconnect.jpg)
+	
+* For MAC users running Catalina.  Mac Security Policies have been enhanced.  See below:
+https://support.apple.com/en-us/HT210176
+
+* To work around this please do the following:
+
+```
+cd /opt/cisco/AnyConnect
+sudo nano AnyConnectLocalPolicy.xml
+```
+
+* Edit ExcludeMacNativeCertStore to "true"
+
+```
+<ExcludeMacNativeCertStore>true</ExcludeMacNativeCertStore>
+```
+
+^X  (control X to exit)
+press Y to indicate that you want to save
+press enter to accept the existing name
+
+Quit anyconnect and re-launch
 
 ## Connecting to Remote Desktop	
 * Using your favorite remote desktop client RDP to:
