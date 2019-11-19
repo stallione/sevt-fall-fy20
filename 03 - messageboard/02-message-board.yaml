@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: message-board
+    labels:
+        app: message-board
+        name: message-board
+spec:
+    containers:
+    - name: message-board
+      image: 10.139.12.210/mb/message_board:version1
+      volumeMounts:
+      - name: mb-volume
+        mountPath: /sqldb
+      ports:
+      - containerPort: 5000
+      imagePullPolicy: Always
+    volumes:
+      - name: mb-volume
+        persistentVolumeClaim:
+          claimName: mboard-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-board
+  labels:
+    name: message-board
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5000
+    nodePort: 30002
+  selector:
+    name: message-board

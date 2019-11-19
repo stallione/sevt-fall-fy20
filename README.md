@@ -3,12 +3,45 @@
 
 Table of Contents
 =================
-
+* [Credentials](#credentials)
 * [Preparation](#preparation)
 	* [Logging In](#logging-in)
 	* [Connecting to Remote Desktop](#connecting-to-remote-desktop)
 		* [Postman Setup](#postman-setup)
+* [Connect to SSH Host](#connect-to-ssh-host)
+* [Connect to Cisco Container Platform UI](#connect-to-cisco-container-platform-ui)
+* [Create New Cluster](#create-new-cluster)
+	* [Page 1](#page-1)
+	* [Page 2](#page-2)
+	* [Page 3](#page-3)
+	* [Page 4](#page-4)
+	* [Page 5](#page-5)
+* [Explore ACI](#explore-aci)
+* [Connect to CCP Cluster](#connect-to-ccp-cluster)
+* [Deploy Database](#deploy-database)
 
+## Credentials
+| Windows Username | Pod Number | ssh host     | username | password    | CCP Cluster CIDR  |
+|------------------|------------|--------------|----------|-------------|-------------------|
+| user1            | Pod1       | 10.139.14.21 | root     | C1sco12345! | 10.139.161.0/27   |
+| user2            | Pod2       | 10.139.14.22 | root     | C1sco12345! | 10.139.161.32/27  |
+| user3            | Pod3       | 10.139.14.23 | root     | C1sco12345! | 10.139.161.64/27  |
+| user4            | Pod4       | 10.139.14.24 | root     | C1sco12345! | 10.139.161.96/27  |
+| user5            | Pod5       | 10.139.14.25 | root     | C1sco12345! | 10.139.161.128/27 |
+| user6            | Pod6       | 10.139.14.26 | root     | C1sco12345! | 10.139.161.160/27 |
+| user7            | Pod7       | 10.139.14.27 | root     | C1sco12345! | 10.139.161.192/27 |
+| user8            | Pod8       | 10.139.14.28 | root     | C1sco12345! | 10.139.161.224/27 |
+| user9            | Pod9       | 10.139.14.29 | root     | C1sco12345! | 10.139.162.0/27   |
+| user10           | Pod10      | 10.139.14.30 | root     | C1sco12345! | 10.139.162.32/27  |
+| user11           | Pod11      | 10.139.14.31 | root     | C1sco12345! | 10.139.162.64/27  |
+| user12           | Pod12      | 10.139.14.32 | root     | C1sco12345! | 10.139.162.96/27  |
+| user13           | Pod13      | 10.139.14.33 | root     | C1sco12345! | 10.139.162.128/27 |
+| user14           | Pod14      | 10.139.14.34 | root     | C1sco12345! | 10.139.162.160/27 |
+| user15           | Pod15      | 10.139.14.35 | root     | C1sco12345! | 10.139.162.192/27 |
+| user16           | Pod16      | 10.139.14.36 | root     | C1sco12345! | 10.139.162.224/27 |
+| user17           | Pod17      | 10.139.14.37 | root     | C1sco12345! | 10.139.163.0/27   |
+| user18           | Pod18      | 10.139.14.38 | root     | C1sco12345! | 10.139.163.32/27  |
+| user19           | Pod19      | 10.139.14.39 | root     | C1sco12345! | 10.139.163.64/27  |
 
 ## Preparation
 
@@ -54,4 +87,186 @@ Before we create our first CCP cluster we need to access the lab.  The lab lever
 		* ![add](images/add.jpg)
 	
 	* We will use this later
+	* Open a Browser from the Desktop
+		* Login to https://10.136.10.5
+			* Accept the security warning
+			* Login with the APIC Credentials you have been provided.
+				* Select "acs" as the Domain
+			* Select "Get Started" if the splash screen appears
+			![apicSplash](images/apicSplash.jpg)
+## Connect to SSH Host
+* ssh to the IP Address you were provided
+	* Use the user [credentials](!credentials) you were provided.
+* Create ssh key
+	```
+	ssh-keygen -t ecdsa
+	```
+	* Accept the defaults (press enter until the screen looks like below
+	![keygen](images/keygen.jpg)
 	
+## Connect to Cisco Container Platform UI
+* Open a web browser and browse to https://10.139.13.50
+	* Accept the security warning
+	* Use the credentials admin/admin
+* We will be deploying a version 2 cluster.  In the top section of the screen select the "Version 2" from the dropdown.
+![version](images/version.jpg)
+
+## Create New Cluster
+* Select "New Cluster" in the upper right hand of the page.
+![newCluster](images/newCluster.jpg)
+#### Page 1
+* Populate the fields as follows
+		* Infrastructure Provider - vsphere
+		* Kubernetes Cluster Name - podXX (where XX is your 2 digit pod number)
+		* Kubernetes Version 1.14.6
+		* ACI-CNI Profile - req-aci
+		* Description - (Optional)
+		![vspherePage1](images/vspherePage1.jpg)
+		* Select "Next"
+
+#### Page 2
+* Populate the fields as follows
+		* Data Center - Richfield
+		* Cluster - cloud-hybrid-hx
+		* Resource Pool - Resources
+		* Storage Class - vsphere
+		* Hyperflex Storage Network - k8-priv-iscsivm-network
+		* Datastore - ccp
+		* VM Template - ccp-tenant-image-1.14.6-ubuntu18-5.0.0
+		![vspherePage2](images/vspherePage2.jpg)
+	 	* Select "Next"
+ 
+#### Page 3
+* Populate the fields as follows
+	* VM Username - ccpuser
+	* SSH Public Key - Varies
+	* Note to get your ssh key we created before go to your ssh host and type the below command.
+	```
+	cat ~/.ssh/id_ecdsa.pub
+	```
+	* Node Subnet in CIDR Notation - See [credentials](!credentials) for your pod subnet.
+	* Root CA Certificate - Copy and paste the below
+```
+	-----BEGIN CERTIFICATE-----
+MIIFgTCCA2mgAwIBAgIUX38UgEe62UciNB3PQmifewgGo1YwDQYJKoZIhvcNAQEL
+BQAwJjEXMBUGA1UEAwwOaW5ncmVzcy5oYXJib3IxCzAJBgNVBAsMAkNBMB4XDTE5
+MDkxNzE1NDAzM1oXDTIxMDkxNjE1NDAzM1owJjEXMBUGA1UEAwwOaW5ncmVzcy5o
+YXJib3IxCzAJBgNVBAsMAkNBMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKC
+AgEA8wG2lUBq796TJsRnnqFjNwW78PLN9PV/F82T0dpF+DG5KbEo4M9ipYHdNDg1
+B+x9I6pQXRculhw8mk5dLNFKNitKNl8rNGZeCqFvrLd/CM289G/lbUbEXsyKDDIr
+u9ZunKUogwVugEEs2pkplFrVmgSH7jiDZNlZgPcRMcNOYkGPcAA5AQVBRrls9zzp
+bimsCyumzZanUkH08wyx65xQ2p2526JFTi9uSEWAekfdXkXvZvyZ+dQi3+vXDDOi
+GsGoHp/Q5YI8ql32MWCu0RRqPIQcP0G64yUYRR10m3qew2MF0YluJTabj20gAD0P
+Fg8bVNpf1+YhsbJgSPmtpVXTyIDARciONZM/UZEpSbgtCA0UOoajZlYJOXYHvkJD
+bbPHmS3CfEHMnjZ4n/tV8LTMVsZtL+JGDzgCkUJTt5nEyZd3Ls6JP4ZuyJR0jtdf
+Jf8mNih7AStRs4aI/EdbQsKEGGPI2iNT1PjQXnXrpinYUXElRDu6QSrvjlGOVCbB
+Y6zzoeHNF2WYBO4Wl+uDXOgncgMcN9UOPfkU7monk9t4OaflvtLCP4I6ZWYaKLZc
+TPGqQHhmOGgUrV31XXR5wpCYclLJYb6mXwceWPSM5Xb3VZAU0UJMCJ35tPlIaJKt
+m+7ofJmO5GKetMdn1NQDT+NckJj2Gxp2zddRFiKGmKJ4oYsCAwEAAaOBpjCBozAS
+BgNVHRMBAf8ECDAGAQH/AgEAMAsGA1UdDwQEAwICpDAdBgNVHQ4EFgQUtTYXvk70
+R0ds/V0T7a4xtgylZlcwYQYDVR0jBFowWIAUtTYXvk70R0ds/V0T7a4xtgylZleh
+KqQoMCYxFzAVBgNVBAMMDmluZ3Jlc3MuaGFyYm9yMQswCQYDVQQLDAJDQYIUX38U
+gEe62UciNB3PQmifewgGo1YwDQYJKoZIhvcNAQELBQADggIBAKzVOSvNKvcaU8Xe
+csPG710DcHh0ei6Iqp2ZASc8XFlDSl0b77H9mwii8oZ+5KFT4xy3JyWZzhuxb/wN
+/MqivsOBa7vy3q8aeUzXyXHxf3jHPGFh27vGor+UaO4fHFW9uK3JG/z6m94KUta/
+YKWRO2ljI/pvn1h0iRV1aUGaqEEWmeGwAvj/xsJsS4D3Byh4rTfExKJdgxibtPWi
+3P0lxbo09ocmPpo0DWAiToI8AfGhGvJWD99sroMVpmM70Op66N42spzjpQ9lXdoL
+G4Xpxbk0uMUWpLi6GHr/56mYg+6NEM1Oe/P6UKgnubcYY7NOQpHeLHCGeeLk0XjH
+g2ZwT2k9Rq1IEeuXGdWScQbKYo9if+Gg4AeaKQCTiEWZp6HBj3JW1POLe/ejFjDl
+Pvawj1SYRdzYX4hzxk7lZNPbVaLXPhN9Mmoxu3pOMA8rJr3vTlFYPTLLxxejvltj
+qXfwb6Iyu0mR3v+1PN2BT9Ws7NRM3UlntJ8lQAQIfQLCmqe+3Kyw6lsFN69Bneku
+WS6EYwFBgki2U/bF2urWMzguZy1RWSCLHECssBl3V49Gui/OfhdQpS1jVaMhYl97
+psQPH+rjXhjrQAZKprMRetVp/Tk5EoL4Bcmb7x16HgumFh3Wswj47Y4b1y7PNi0X
+EsfEo0zNJn6sQi2F8ZU56fmiljwc
+-----END CERTIFICATE-----
+```
+![vspherePage3](images/vspherePage3.jpg)
+* Select "Next"
+
+#### Page 4
+
+* Leve the defaults for Page 4.  These are addons that can be deployed as part of CCP but are not required.
+	![vspherePage4](images/vspherePage4.jpg)
+	* Select "Next"
+
+#### Page 5
+* If the summary looks good select "Finish"
+	![vspherePage5](images/vspherePage5.jpg)
+	
+The cluster creation process takes a few minutes.  
+While that is happening, go to your remote desktop session where Postman is and in the upper left hand corner select "Runner"
+![postmanRunner](images/postmanRunner.jpg)
+	* Runner is a tool within postman that calls a list of APIS Commands
+		* The APIs that we are calling are going to deploy an application profile within ACI so that we do not have to "click, click, click"
+	* In the "Choose a collection or folder" box select "SEVT" and "clwall copy"
+	* Select the environment that you created earlier under "Environment"
+	* Scroll to the bottomw and select "Run sevt"
+	![postmanApic](images/postmanApic.jpg)
+
+## Explore ACI
+
+* Log into your APIC Dashboard
+* Select "Tenants"
+* Select YOUR Pod Number
+* Expand "podXX"
+	* Application Profiles
+	* Select "livewall"
+		* On the right hand side select "Topology"
+	![livewallTopo](images/livewallTopo.jpg)
+	You can explore the policy as you would like.
+
+## Connect to CCP Cluster
+* Go to your SSH Host
+	* Set the MGMT_HOST variable
+		```
+		export MGMT_HOST=10.139.13.50
+		```
+	* login to CCP and get the cookie
+		```
+		curl -k -c cookie.txt -H "Content-Type:application/x-www-form-urlencoded" -d 'username=admin&password=admin' https://$MGMT_HOST/2/system/login/
+		```
+	![getCookie](images/getCookie.jpg)
+	
+	* Get your cluster UUID
+	```
+	curl -sk -b cookie.txt https://$MGMT_HOST/2/clusters | jq -r '.[].name,.[].uuid'
+	```
+	* The Pod name is listed ontop
+	![podUUID](images/podUUID.jpg)
+	
+	* Set the tenant cluster uuid as a variable
+	```
+	export TC=<uuid from previous command>
+	```
+	
+	* Get the kubeconfig file
+		* kubeconfig is a yaml file that has the configuration and secret information to connect to our kubernetes cluster
+		```
+		curl -sk -b cookie.txt https://$MGMT_HOST/2/clusters/${TC}/env -o kubeconfig.env
+		```
+	* Set the kubeconfig files as an environment variable
+		```
+		export KUBECONFIG=~/kubeconfig.env
+		```
+	* Test your connection
+		```
+		kubectl get nodes
+		```
+		![kubectlTest](images/kubectlTest.jpg)
+		
+## Deploy Database
+	* We are deploying a database onto an existing MYSQL Server.  Substitute your pod number for "podXX"
+	```
+	mysql -h 10.139.11.209 -u root -p -e "create database podXX";
+	```
+	The password when prompted is "C1sco123"
+	```
+	mysql -h 10.139.11.209 -u root -p podXX < mysql.sql
+	```
+	The password when prompted is "C1sco123"
+	
+	* To verify if the database is there run the following command.  You should see a table like below.
+	```
+	mysql -h 10.139.11.209 -u root -p -D pod01 -e "show tables";
+	```
+	![dbTable](images/dbTable.jpg)
