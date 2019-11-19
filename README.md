@@ -86,6 +86,7 @@ Quit anyconnect and re-launch
 * Using your favorite remote desktop client RDP to:
 	* req-rdp.csc.richfield.cisco.com
 		* Login using the lab credentials provided
+			* format should be csc\<username>
 		* username: userXX
 		* password: "C1sco12345!"
 		* Close the Server Manager Screen If present
