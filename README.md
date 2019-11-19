@@ -87,7 +87,7 @@ Quit anyconnect and re-launch
 	* req-rdp.csc.richfield.cisco.com
 		* Login using the lab credentials provided
 			* format should be csc\<username>
-		* username: userXX
+		* username: demoXX
 		* password: "C1sco12345!"
 		* Close the Server Manager Screen If present
 		
