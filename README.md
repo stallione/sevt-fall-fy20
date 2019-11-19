@@ -426,3 +426,30 @@ kubectl get svc
 * Web to the IP and the port number provided
 
 ![mbWeb](images/mbWeb.jpg)
+
+* Select "Signup"
+* Provide the requested info (this is dummiy info for demo purposes only)
+
+![signUp](images/signUp.jpg)
+
+* Sign in using the credentials you provided
+
+![signIn](images/signIn)
+
+* Create a few messages to fill in the database.
+
+![messages](images/messages.jpg)
+
+* Apply the new version of the messageboard
+
+```
+./03-changeimage.sh 
+```
+
+* What happened?
+
+![mbChange](images/mbChange.jpg)
+
+* Notice the messages stayed.
+* Why?
+* 
