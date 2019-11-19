@@ -19,6 +19,7 @@ Table of Contents
 * [Explore ACI](#explore-aci)
 * [Connect to CCP Cluster](#connect-to-ccp-cluster)
 * [Deploy Database](#deploy-database)
+* [Clone the Git Repo](#clone-the-git-repo)
 
 ## Credentials
 | Windows Username | Pod Number | ssh host     | username | password    | CCP Cluster CIDR  |
@@ -265,8 +266,29 @@ While that is happening, go to your remote desktop session where Postman is and 
 	```
 	The password when prompted is "C1sco123"
 	
-	* To verify if the database is there run the following command.  You should see a table like below.
+* To verify if the database is there run the following command.  You should see a table like below.
 	```
 	mysql -h 10.139.11.209 -u root -p -D pod01 -e "show tables";
 	```
 	![dbTable](images/dbTable.jpg)
+	
+## Clone the Git Repo
+	We need to download the files for the rest of the lab.  From the SSH host run the following:
+	```
+	git clone https://github.com/3pings/sevt-fall-fy20.git
+	cd sevt-fall-fy20/
+	```
+The rest of this lab will utilize these files.  The first thing we are going to need to do is to deploy our "livewall app".
+
+	```
+	cd 01\ -\ wall/
+	```
+* In the folder there is a script that runs and will build our yaml files with our relevant pod information.  The foormat of this command is below replacing "podXX" with your pod information
+	
+	```
+	./01-launch-livewall.sh podXX
+	```
+	
+	You should see something like the below
+	![livewallDeploy](images/livewallDeploy.jpg)
+	
