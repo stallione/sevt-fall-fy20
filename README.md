@@ -7,7 +7,7 @@ Table of Contents
 * [Preparation](#preparation)
 	* [Logging In](#logging-in)
 	* [Connecting to Remote Desktop](#connecting-to-remote-desktop)
-	* [Postman Setup](#postman-setup)
+		* [Postman Setup](#postman-setup)
 
 
 ## Preparation
@@ -21,17 +21,16 @@ Before we create our first CCP cluster we need to access the lab.  The lab lever
 	![anyconnect](images/anyconnect.jpg)
 
 ## Connecting to Remote Desktop	
-
 * Using your favorite remote desktop client RDP to:
 	* req-rdp.csc.richfield.cisco.com
 		* Login using the lab credentials provided
 		* username: userXX
-		* password: C1sco12345!
+		* password: "C1sco12345!"
 		* Close the Server Manager Screen If present
 		
-## Postman Setup 
-	
-	* Open the Postman App on the Desktop
+### Postman Setup
+
+* Open the Postman App on the Desktop
 	![postman](images/postman.jpg)
 	
 	* In the upper left hand corner select "Import"
@@ -55,4 +54,4 @@ Before we create our first CCP cluster we need to access the lab.  The lab lever
 		* ![add](images/add.jpg)
 	
 	* We will use this later
-
+	
