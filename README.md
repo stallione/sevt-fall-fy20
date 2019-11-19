@@ -55,7 +55,7 @@ Before we create our first CCP cluster we need to access the lab.  The lab lever
 
 * Open your Cisco Anyconnect Client
 	* Connect to vpn.reqdemo.com 
-	* Select "reqlab-admin" as the domain
+	* Select "reqlab-admin" as the Group
 	(your vpn may drop and reconnect after 1 minute.  This is normal)
 	![anyconnect](images/anyconnect.jpg)
 	
