@@ -46,6 +46,10 @@ Table of Contents
 | demo17   | Pod17      | 10.139.14.37 | root     | C1sco12345! | 10.139.163.0/27   |
 | demo18   | Pod18      | 10.139.14.38 | root     | C1sco12345! | 10.139.163.32/27  |
 | demo19   | Pod19      | 10.139.14.39 | root     | C1sco12345! | 10.139.163.64/27  |
+| demo20   | Pod20      | 10.139.14.40 | root     | C1sco12345! | 10.139.163.96/27  |
+| demo21   | Pod21      | 10.139.14.39 | root     | C1sco12345! | 10.139.163.128/27  |
+| demo22   | Pod22      | 10.139.14.39 | root     | C1sco12345! | 10.139.163.160/27  |
+
 
 ## Preparation
 
@@ -86,7 +90,7 @@ Quit anyconnect and re-launch
 * Using your favorite remote desktop client RDP to:
 	* req-rdp.csc.richfield.cisco.com
 		* Login using the lab credentials provided
-			* format should be csc\<username>
+			* format should be "csc\<username>"
 		* username: demoXX
 		* password: "C1sco12345!"
 		* Close the Server Manager Screen If present
