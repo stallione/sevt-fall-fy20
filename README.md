@@ -90,8 +90,8 @@ Quit anyconnect and re-launch
 * Using your favorite remote desktop client RDP to:
 	* req-rdp.csc.richfield.cisco.com
 		* Login using the lab credentials provided
-			* format should be "csc\<username>"
-		* username: demoXX
+			* format should be "csc\username"
+		* username: demoX
 		* password: "C1sco12345!"
 		* Close the Server Manager Screen If present
 		
@@ -161,15 +161,16 @@ Quit anyconnect and re-launch
 
 #### Page 2
 * Populate the fields as follows
-		* Data Center - Richfield
-		* Cluster - cloud-hybrid-hx
-		* Resource Pool - Resources
-		* Storage Class - vsphere
-		* Hyperflex Storage Network - k8-priv-iscsivm-network
-		* Datastore - ccp
-		* VM Template - ccp-tenant-image-1.14.6-ubuntu18-5.0.0
+* 
+	* Data Center - Richfield
+	* Cluster - cloud-hybrid-hx
+	* Resource Pool - Resources
+	* Storage Class - vsphere
+	* Hyperflex Storage Network - k8-priv-iscsivm-network
+	* Datastore - ccp
+	* VM Template - ccp-tenant-image-1.14.6-ubuntu18-5.0.0
 		![vspherePage2](images/vspherePage2.jpg)
-	 	* Select "Next"
+	 * Select "Next"
  
 #### Page 3
 * Populate the fields as follows
@@ -264,7 +265,7 @@ While that is happening, go to your remote desktop session where Postman is and 
 	
 	* Get your cluster UUID
 	```
-	curl -sk -b cookie.txt https://$MGMT_HOST/2/clusters | jq -r '.[].name,.[].uuid'
+	curl -sk -b cookie.txt https://$MGMT_HOST/2/clusters | jq -r '.[] | {name: .name, uuid: .uuid}'
 	```
 	* The Pod name is listed ontop
 	![podUUID](images/podUUID.jpg)
