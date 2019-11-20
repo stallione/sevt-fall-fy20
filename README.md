@@ -150,13 +150,14 @@ Quit anyconnect and re-launch
 ![newCluster](images/newCluster.jpg)
 #### Page 1
 * Populate the fields as follows
-		* Infrastructure Provider - vsphere
-		* Kubernetes Cluster Name - podXX (where XX is your 2 digit pod number)
-		* Kubernetes Version 1.14.6
-		* ACI-CNI Profile - req-aci
-		* Description - (Optional)
+
+	* Infrastructure Provider - vsphere
+	* Kubernetes Cluster Name - podXX (where XX is your 2 digit pod number)
+	* Kubernetes Version 1.14.6
+	* ACI-CNI Profile - req-aci
+	* Description - (Optional)
 		![vspherePage1](images/vspherePage1.jpg)
-		* Select "Next"
+	* Select "Next"
 
 #### Page 2
 * Populate the fields as follows
