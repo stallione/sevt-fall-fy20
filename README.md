@@ -182,7 +182,7 @@ Quit anyconnect and re-launch
 	* Node Subnet in CIDR Notation - See [credentials](!credentials) for your pod subnet.
 	* Root CA Certificate - Copy and paste the below
 ```
-	-----BEGIN CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
 MIIFgTCCA2mgAwIBAgIUX38UgEe62UciNB3PQmifewgGo1YwDQYJKoZIhvcNAQEL
 BQAwJjEXMBUGA1UEAwwOaW5ncmVzcy5oYXJib3IxCzAJBgNVBAsMAkNBMB4XDTE5
 MDkxNzE1NDAzM1oXDTIxMDkxNjE1NDAzM1owJjEXMBUGA1UEAwwOaW5ncmVzcy5o
