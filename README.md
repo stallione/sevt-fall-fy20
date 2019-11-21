@@ -129,7 +129,7 @@ Quit anyconnect and re-launch
 				* Select "acs" as the Domain
 			* Select "Get Started" if the splash screen appears
 			![apicSplash](images/apicSplash.jpg)
-## Connect to SSH Host
+## Connect to SSH Linux Host
 
 * ssh to the IP Address you were provided
 	* Use the user [credentials](!credentials) you were provided.
