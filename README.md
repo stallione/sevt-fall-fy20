@@ -25,7 +25,7 @@ Table of Contents
 
 ## Credentials
 
-| Username | Pod Number | ssh host     | username | password    | CCP Cluster CIDR  |
+| AD Uname | Pod Number | ssh host     | Lnx Uname| password    | CCP Cluster CIDR  |
 |----------|------------|--------------|----------|-------------|-------------------|
 | demo1    | Pod1       | 10.139.14.21 | root     | C1sco12345! | 10.139.161.0/27   |
 | demo2    | Pod2       | 10.139.14.22 | root     | C1sco12345! | 10.139.161.32/27  |
@@ -47,8 +47,8 @@ Table of Contents
 | demo18   | Pod18      | 10.139.14.38 | root     | C1sco12345! | 10.139.163.32/27  |
 | demo19   | Pod19      | 10.139.14.39 | root     | C1sco12345! | 10.139.163.64/27  |
 | demo20   | Pod20      | 10.139.14.40 | root     | C1sco12345! | 10.139.163.96/27  |
-| demo21   | Pod21      | 10.139.14.41 | root     | C1sco12345! | 10.139.163.128/27  |
-| demo22   | Pod22      | 10.139.14.42 | root     | C1sco12345! | 10.139.163.160/27  |
+| demo21   | Pod21      | 10.139.14.41 | root     | C1sco12345! | 10.139.163.128/27 |
+| demo22   | Pod22      | 10.139.14.42 | root     | C1sco12345! | 10.139.163.160/27 |
 
 
 ## Preparation
@@ -115,7 +115,8 @@ Quit anyconnect and re-launch
 		* Postman variables can be used by creating an environment where the variables and their values are defined.  Name the environment "CCP"
 		* Add the variables as seen in the screenshot.
 			* Note in the "tenant" variable put your "pod value there"
-			* replace the username and password with the values you have been given
+			* Use the "AD Uname" for "Username"
+			* Provide the Password you were given from the [credentials](!credentials)
 		![variables](images/variables.jpg)
 		* Select "Add" when completed.
 		* ![add](images/add.jpg)
@@ -129,6 +130,7 @@ Quit anyconnect and re-launch
 			* Select "Get Started" if the splash screen appears
 			![apicSplash](images/apicSplash.jpg)
 ## Connect to SSH Host
+
 * ssh to the IP Address you were provided
 	* Use the user [credentials](!credentials) you were provided.
 * Create ssh key
@@ -139,6 +141,7 @@ Quit anyconnect and re-launch
 	![keygen](images/keygen.jpg)
 	
 ## Connect to Cisco Container Platform UI
+
 * Open a web browser and browse to https://10.139.13.50
 	* Accept the security warning
 	* Use the credentials admin/admin
@@ -148,11 +151,14 @@ Quit anyconnect and re-launch
 ## Create New Cluster
 * Select "New Cluster" in the upper right hand of the page.
 ![newCluster](images/newCluster.jpg)
+
 #### Page 1
+
 * Populate the fields as follows
 
 	* Infrastructure Provider - vsphere
-	* Kubernetes Cluster Name - podXX (where XX is your 2 digit pod number)
+	* Kubernetes Cluster Name - podX (where X is your 2 digit pod number)
+		* DO NOT USE DASHES AND REMEMBER THE CASE
 	* Kubernetes Version 1.14.6
 	* ACI-CNI Profile - req-aci
 	* Description - (Optional)
@@ -160,8 +166,9 @@ Quit anyconnect and re-launch
 	* Select "Next"
 
 #### Page 2
+
 * Populate the fields as follows
-* 
+
 	* Data Center - Richfield
 	* Cluster - cloud-hybrid-hx
 	* Resource Pool - Resources
@@ -173,15 +180,19 @@ Quit anyconnect and re-launch
 	 * Select "Next"
  
 #### Page 3
+
 * Populate the fields as follows
 	* VM Username - ccpuser
 	* SSH Public Key - Varies
 	* Note to get your ssh key we created before go to your ssh host and type the below command.
+	
 	```
 	cat ~/.ssh/id_ecdsa.pub
 	```
+	
 	* Node Subnet in CIDR Notation - See [credentials](!credentials) for your pod subnet.
 	* Root CA Certificate - Copy and paste the below
+
 ```
 -----BEGIN CERTIFICATE-----
 MIIFgTCCA2mgAwIBAgIUX38UgEe62UciNB3PQmifewgGo1YwDQYJKoZIhvcNAQEL
@@ -216,7 +227,9 @@ psQPH+rjXhjrQAZKprMRetVp/Tk5EoL4Bcmb7x16HgumFh3Wswj47Y4b1y7PNi0X
 EsfEo0zNJn6sQi2F8ZU56fmiljwc
 -----END CERTIFICATE-----
 ```
+
 ![vspherePage3](images/vspherePage3.jpg)
+
 * Select "Next"
 
 #### Page 4
@@ -226,6 +239,7 @@ EsfEo0zNJn6sQi2F8ZU56fmiljwc
 	* Select "Next"
 
 #### Page 5
+
 * If the summary looks good select "Finish"
 	![vspherePage5](images/vspherePage5.jpg)
 	
@@ -252,6 +266,7 @@ While that is happening, go to your remote desktop session where Postman is and 
 	You can explore the policy as you would like.
 
 ## Connect to CCP Cluster
+
 * Go to your SSH Host
 	* Set the MGMT_HOST variable
 		```
@@ -276,10 +291,13 @@ While that is happening, go to your remote desktop session where Postman is and 
 	```
 	
 	* Get the kubeconfig file
+		
 		* kubeconfig is a yaml file that has the configuration and secret information to connect to our kubernetes cluster
+		
 		```
 		curl -sk -b cookie.txt https://$MGMT_HOST/2/clusters/${TC}/env -o kubeconfig.env
 		```
+	
 	* Set the kubeconfig files as an environment variable
 		```
 		export KUBECONFIG=~/kubeconfig.env
@@ -291,6 +309,7 @@ While that is happening, go to your remote desktop session where Postman is and 
 		![kubectlTest](images/kubectlTest.jpg)
 		
 ## Deploy Database
+
 * We are deploying a database onto an existing MYSQL Server.  Substitute your pod number for "podXX"
 	
 	```
@@ -324,6 +343,7 @@ While that is happening, go to your remote desktop session where Postman is and 
 	```
 	cd 01\ -\ wall/
 	```
+
 * In the folder there is a script that runs and will build our yaml files with our relevant pod information.  The foormat of this command is below replacing "podXX" with your pod information
 	
 	```
@@ -446,7 +466,7 @@ kubectl apply -f 02-message-board.yaml
 
 ![mbDeploy](images/mbDeploy.jpg)
 
-* Get the Servicve IP
+* Get the Service IP
 
 ```
 kubectl get svc
@@ -485,4 +505,4 @@ kubectl get svc
 
 * Notice the messages stayed.
 * Why?
-* 
+
